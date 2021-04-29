@@ -4,7 +4,7 @@
         "adapters": [
             {
                 "module": {
-                    "name": "'./util/mqttClient",
+                    "name": "./util/mqttClient",
                     "class": "MqttProtocolAdapter"
                 },
                 "config": {
