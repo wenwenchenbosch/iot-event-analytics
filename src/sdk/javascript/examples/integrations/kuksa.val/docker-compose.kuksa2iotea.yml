@@ -1,17 +1,17 @@
 version: '3.2'
 services:
-  kuksa-val:
-    image: ${KUKSA_VAL_IMG}
-    environment:
-      - KUKSAVAL_OPTARGS=--insecure
-    ports:
-      - '8090:8090'
-    networks:
-      - iotea-platform-network
-    volumes:
-      - type: bind
-        source: ${KUKSA_VAL_CONFIG_DIR}
-        target: "/config"
+  #kuksa-val:
+  #  image: ${KUKSA_VAL_IMG}
+  #  environment:
+  #    - KUKSAVAL_OPTARGS=--insecure
+  #  ports:
+  #    - '8090:8090'
+  #  networks:
+  #    - iotea-platform-network
+  #  volumes:
+  #    - type: bind
+  #      source: ${KUKSA_VAL_CONFIG_DIR}
+  #      target: "/config"
   vss2iotea:
     build:
       context: ..
@@ -23,8 +23,8 @@ services:
         - HTTPS_PROXY=${DOCKER_HTTPS_PROXY}
     networks:
       - iotea-platform-network
-    depends_on:
-      - kuksa-val
+        #depends_on:
+      #  - kuksa-val
     volumes:
       - type: bind
         source: ${VSS2IOTEA_VAL_CONFIG_DIR}
