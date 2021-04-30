@@ -39,6 +39,7 @@ class EventConsumer : public Talent {
     }
 
     void OnEvent(const Event& event, EventContext context) override {
+        std::cout << "test" << std::endl;
         log::Info() << "Event: " << event.GetValue().dump(4);
         log::Info() << "Event: " << event.GetType();
         if (event.GetType() == "vehicle") {

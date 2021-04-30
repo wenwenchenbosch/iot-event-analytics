@@ -7,8 +7,10 @@ ARG HTTPS_PROXY
 
 ENV HTTP_PROXY=${HTTP_PROXY}
 ENV HTTPS_PROXY=${HTTPS_PROXY}
+RUN echo ${HTTP_PROXY}
 
 RUN mkdir -p /mosquitto/templates
+RUN wget google.de
 
 # Overwrite the current configuration with the given one
 COPY ./templates/mosquitto.mustache /mosquitto/templates
