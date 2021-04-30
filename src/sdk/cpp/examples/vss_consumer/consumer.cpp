@@ -68,8 +68,9 @@ class EventConsumer : public Talent {
     }
 
     schema::rule_ptr OnGetRules() const override {
-        return OrRules(LessThan("Longitudinal", 10, "Vehicle.Acceleration")),
-                        IsSet("dingdings", "blob");
+        std::cout << "testOnGet" << std::endl;
+        return OrRules(Change("Acceleration$Longitudinal", "Vehicle"),
+                        (Change("Speed", "Vehicle")));
     }
 };
 
