@@ -19,6 +19,7 @@ const JsonModel = require('../../../../../core/util/jsonModel');
 
 const {
     AndRules,
+    OrRules,
     Rule,
     OpConstraint
 } = require('../../../../../core/rules');
@@ -52,19 +53,21 @@ class VssWorker extends Talent {
     }
 
     getRules() {
-        return new AndRules([
-            new Rule(new OpConstraint('Acceleration$Longitudinal', OpConstraint.OPS.ISSET, null, 'Vehicle', VALUE_TYPE_RAW))
+        return new OrRules([
+            new Rule(new OpConstraint('Acceleration$Lateral', OpConstraint.OPS.ISSET, null, 'Vehicle', VALUE_TYPE_RAW)),
+            new Rule(new OpConstraint('Speed', OpConstraint.OPS.ISSET, null, 'Vehicle', VALUE_TYPE_RAW))
         ]);
     }
 
     async onEvent(ev) {
         const rawValue = TalentInput.getRawValue(ev, 1, false, ev.feature, ev.type, ev.instance, true);
 
-        this.logger.info(`Talent received value ${JSON.stringify(rawValue)} from Kuksa.VAL adapter`);
+        this.logger.info(`!!!Talent received value ${JSON.stringify(rawValue)} from Kuksa.VAL adapter`);
 
         const to = new TalentOutput();
 
         to.addFor(ev.subject, ev.type, ev.instance, 'Vehicle.Acceleration.Lateral', VssOutputValue.create(this, VssInputValue.getSubscription(rawValue), rawValue.value));
+      //to.addFor(ev.subject, ev.type, ev.instance, 'Vehicle.Speed', VssOutputValue.create(this, VssInputValue.getSubscription(rawValue), rawValue.value));
 
         return to.toJson();
     }
@@ -77,8 +80,9 @@ const vssws = new VssWebsocket(config.get('vss.ws'), config.get('vss.jwt'));
 let accLon = 0;
 
 async function publishAccLonToVssIndefinitly() {
-    demoLogger.info(`Publishing ${accLon} to Vehicle.Acceleration.Longitudinal...`);
+    demoLogger.info(`Publishing ${accLon} to Vehicle.Acceleration.Vertical...`);
 
+    await vssws.publish('Vehicle.Acceleration.Vertical', accLon++);
     await vssws.publish('Vehicle.Acceleration.Longitudinal', accLon++);
 
     setTimeout(() => {

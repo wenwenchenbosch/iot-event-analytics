@@ -19,6 +19,30 @@
                             "type": "number",
                             "encoder": null
                         }
+                    },
+                    "Acceleration$Vertical": {
+                        "idx": 2,
+                        "description": "Vehicle acceleration in z (longitudinal acceleration).",
+                        "encoding": {
+                            "type": "number",
+                            "encoder": null
+                        }
+                    },
+                    "ODB$Speed": {
+                        "idx": 3,
+                        "description": "Vehicle speed.",
+                        "encoding": {
+                            "type": "number",
+                            "encoder": null
+                        }
+                    },
+                    "Speed": {
+                        "idx": 4,
+                        "description": "Vehicle speed.",
+                        "encoding": {
+                            "type": "number",
+                            "encoder": null
+                        }
                     }
                 }
             }
