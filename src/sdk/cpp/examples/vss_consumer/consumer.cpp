@@ -39,13 +39,12 @@ class EventConsumer : public Talent {
     }
 
     void OnEvent(const Event& event, EventContext context) override {
-        std::cout << "test" << std::endl;
-        log::Info() << "Event: " << event.GetValue().dump(4);
-        log::Info() << "Event: " << event.GetValue()["value"].get<int>();
-        log::Info() << "Event: " << event.GetType();
-        if (event.GetType() == "Vehicle") {
+        log::Info() << "Event GetType: " << event.GetType();
+        log::Info() << "Event GetFeature: " << event.GetFeature();
+        log::Info() << "Event GetValue: " << event.GetValue()["value"].get<int>();
+        if (event.GetFeature() == "Speed") {
             auto args =
-                json{event.GetValue()["value"].get<int>(), json{{"factor", event.GetValue()["value"].get<int>()}, {"unit", "thing"}}};
+                json{event.GetValue()["value"].get<int>(), json{{"factor", event.GetValue()["value"].get<int>()}, {"unit", "kmh"}}};
 
             auto t = context.Call(provider_talent.Multiply, args);
 

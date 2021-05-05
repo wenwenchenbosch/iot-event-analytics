@@ -266,7 +266,7 @@ class VssAdapter extends Talent {
             const uniqueVssPaths = this.__extractUniqueVssPathsFromRules(talentConfig.rules);
 
             if (uniqueVssPaths.length === 0) {
-                this.logger.info('No VSS Paths found for rules', talentConfig.rules);
+                this.logger.info('No VSS Paths found for rules', talentConfig.rules.stringify());
                 return;
             }
 
