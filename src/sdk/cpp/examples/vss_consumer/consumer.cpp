@@ -38,7 +38,7 @@ class EventConsumer : public Talent {
         provider_talent.Fib = RegisterCallee("provider_talent", "fibonacci");
     }
 
-    void OnEvent(const Event& event, EventContext context) override {
+    void OnEvent(const Event& event, event_ctx_ptr context) override {
         log::Info() << "Event GetType: " << event.GetType();
         log::Info() << "Event GetFeature: " << event.GetFeature();
         log::Info() << "Event GetValue: " << event.GetValue()["value"].get<int>();
@@ -46,13 +46,13 @@ class EventConsumer : public Talent {
             auto args =
                 json{event.GetValue()["value"].get<int>(), json{{"factor", event.GetValue()["value"].get<int>()}, {"unit", "kmh"}}};
 
-            auto t = context.Call(provider_talent.Multiply, args);
+            auto t = context->Call(provider_talent.Multiply, args);
 
-            context.Gather([](std::vector<json> replies) {
+            context->Gather([](std::vector<json> replies) {
                 log::Info() << "Multiply result: " << replies[0].dump(4);
             }, nullptr, t);
 
-            auto s = context.Call(provider_talent.Fib, args, 100);
+            auto s = context->Call(provider_talent.Fib, args, 100);
 
             auto handle_result = [](std::vector<json> replies) {
                 log::Info() << "Fibonacci result: " << replies[0].dump(4);
@@ -61,7 +61,7 @@ class EventConsumer : public Talent {
                 log::Info() << "******* Timed out waiting for result";
             };
 
-            context.Gather(handle_result, handle_timeout, s);
+            context->Gather(handle_result, handle_timeout, s);
         }
     }
 
@@ -74,11 +74,11 @@ class EventConsumer : public Talent {
 
 static Client client = Client{SERVER_ADDRESS};
 
-void signal_handler(int signal) {
+void signal_handler(int) {
     client.Stop();
 }
 
-int main(int argc, char* argv[]) {
+int main(int, char**) {
     auto talent = std::make_shared<EventConsumer>();
     client.RegisterTalent(talent);
 
