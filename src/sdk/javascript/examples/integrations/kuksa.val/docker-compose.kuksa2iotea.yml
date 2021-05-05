@@ -23,8 +23,8 @@ services:
         - HTTPS_PROXY=${DOCKER_HTTPS_PROXY}
     networks:
       - iotea-platform-network
-        #depends_on:
-      #  - kuksa-val
+    depends_on:
+      - kuksa-val
     volumes:
       - type: bind
         source: ${VSS2IOTEA_VAL_CONFIG_DIR}

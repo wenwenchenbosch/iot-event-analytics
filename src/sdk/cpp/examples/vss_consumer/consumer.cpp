@@ -41,10 +41,11 @@ class EventConsumer : public Talent {
     void OnEvent(const Event& event, EventContext context) override {
         std::cout << "test" << std::endl;
         log::Info() << "Event: " << event.GetValue().dump(4);
+        log::Info() << "Event: " << event.GetValue()["value"].get<int>();
         log::Info() << "Event: " << event.GetType();
-        if (event.GetType() == "vehicle") {
+        if (event.GetType() == "Vehicle") {
             auto args =
-                json{event.GetValue().get<int>(), json{{"factor", event.GetValue().get<int>()}, {"unit", "thing"}}};
+                json{event.GetValue()["value"].get<int>(), json{{"factor", event.GetValue()["value"].get<int>()}, {"unit", "thing"}}};
 
             auto t = context.Call(provider_talent.Multiply, args);
 
@@ -62,8 +63,6 @@ class EventConsumer : public Talent {
             };
 
             context.Gather(handle_result, handle_timeout, s);
-        } else if (event.GetType() == "blob") {
-            log::Info() << "Currently at " << event.GetValue().dump() << " dingdings";
         }
     }
 
