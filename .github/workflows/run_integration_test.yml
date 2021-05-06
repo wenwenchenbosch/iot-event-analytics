@@ -36,7 +36,7 @@ jobs:
         python3 -m venv .venv
         source .venv/bin/activate
         python -m pip install wheel
-        python -m pip install $IOTEA_PROJECT_ROOT/src/sdk/python/pkg --force
+        python -m pip install $IOTEA_PROJECT_ROOT/src/sdk/python/src --force
 
     - name: Build C++ tests
       working-directory: ${{github.workspace}}/test/integration-tests/testset_sdk/cpp
@@ -57,6 +57,7 @@ jobs:
         python ./testset_sdk/python/test_set_sdk.py 2>&1 >/dev/null &
         python ./testset_sdk/python/function_provider.py 2>&1 >/dev/null &
         node ./testset_sdk/javascript/functionProvider.js 2>&1 >/dev/null &
+        node ./testset_sdk/javascript/eventTester.js 2>&1 >/dev/null &
         node ./testset_sdk/javascript/testSetSDK.js 2>&1 >/dev/null &
         node ./runner/javascript/test_runner.js
       timeout-minutes: 1
