@@ -8,8 +8,8 @@
  * SPDX-License-Identifier: MPL-2.0
  ****************************************************************************/
 
-#ifndef IOTEA_SCHEMA_HPP
-#define IOTEA_SCHEMA_HPP
+#ifndef SRC_SDK_CPP_LIB_INCLUDE_SCHEMA_HPP_
+#define SRC_SDK_CPP_LIB_INCLUDE_SCHEMA_HPP_
 
 #include <memory>
 #include <regex>
@@ -562,6 +562,7 @@ class Schema {
    public:
     Schema(const std::string& id, const std::vector<OutputFeature>& outputs,
            const options_map& options, rule_ptr rules);
+
     json Json() const;
 };
 
@@ -771,4 +772,4 @@ schema::rule_ptr NelsonOut3Se(const std::string& feature, const std::string& typ
 }  // namespace core
 }  // namespace iotea
 
-#endif // IOTEA_SCHEMA_HPP_
+#endif // SRC_SDK_CPP_LIB_INCLUDE_SCHEMA_HPP_
