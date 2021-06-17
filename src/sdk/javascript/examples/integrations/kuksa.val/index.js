@@ -52,6 +52,7 @@ class VssWorker extends Talent {
 
     getRules() {
         return new OrRules([
+            new Rule(new OpConstraint('Acceleration$Longitudinal', OpConstraint.OPS.ISSET, null, 'Vehicle', VALUE_TYPE_RAW)),
             new Rule(new OpConstraint('Acceleration$Lateral', OpConstraint.OPS.ISSET, null, 'Vehicle', VALUE_TYPE_RAW)),
             new Rule(new OpConstraint('Speed', OpConstraint.OPS.ISSET, null, 'Vehicle', VALUE_TYPE_RAW))
         ]);

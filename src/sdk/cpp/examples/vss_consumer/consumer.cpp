@@ -13,65 +13,66 @@
 #include <memory>
 
 #include "nlohmann/json.hpp"
-#include "iotea.hpp"
-#include "logging.hpp"
+#include "client.hpp"
 #include "mqtt_client.hpp"
-#include "schema.hpp"
-
-using json = nlohmann::json;
-
-const std::string SERVER_ADDRESS("tcp://localhost:1883");
 
 using namespace iotea::core;
+using json = nlohmann::json;
+
+static const std::string SERVER_ADDRESS("tcp://localhost:1883");
+static const std::string TALENT_NAME("vss_consumer");
+static const std::string PROVIDED_FEATURE_NAME("messageString");
+static const std::string PROVIDED_FETAURE_TYPE(schema::DEFAULT_TYPE);
+
 
 class EventConsumer : public Talent {
-   private:
-    struct ProviderTalent {
-        Callee Multiply;
-        Callee Fib;
-    } provider_talent;
 
    public:
     EventConsumer()
-        : Talent("event_consumer") {
-        provider_talent.Multiply = RegisterCallee("provider_talent", "multiply");
-        provider_talent.Fib = RegisterCallee("provider_talent", "fibonacci");
-    }
+        : Talent(TALENT_NAME) {
 
-    void OnEvent(const Event& event, event_ctx_ptr context) override {
-        log::Info() << "Event GetType: " << event.GetType();
-        log::Info() << "Event GetFeature: " << event.GetFeature();
-        log::Info() << "Event GetValue: " << event.GetValue()["value"].get<int>();
-        if (event.GetFeature() == "Speed") {
-            auto args =
-                json{event.GetValue()["value"].get<int>(), json{{"factor", event.GetValue()["value"].get<int>()}, {"unit", "kmh"}}};
+        int ttl = 1000;
+        int history = 30;
+        AddOutput(PROVIDED_FEATURE_NAME, schema::Metadata("Message to be forwarded to echo provider", history, ttl, "ONE",
+                                                          schema::OutputEncoding(schema::OutputEncoding::Type::String)));
 
-            auto t = context->Call(provider_talent.Multiply, args);
-
-            context->Gather([](std::vector<json> replies) {
-                log::Info() << "Multiply result: " << replies[0].dump(4);
-            }, nullptr, t);
-
-            auto s = context->Call(provider_talent.Fib, args, 100);
-
-            auto handle_result = [](std::vector<json> replies) {
-                log::Info() << "Fibonacci result: " << replies[0].dump(4);
-            };
-            auto handle_timeout = [](){
-                log::Info() << "******* Timed out waiting for result";
-            };
-
-            context->Gather(handle_result, handle_timeout, s);
-        }
     }
 
     schema::rule_ptr OnGetRules() const override {
         std::cout << "testOnGet" << std::endl;
-        return OrRules(//Change("Acceleration$Longitudinal", "Vehicle"),
+        return OrRules(
+            Change("Acceleration$Longitudinal", "Vehicle"),
             Change("Acceleration$Vertical", "Vehicle"),
         Change("Acceleration$Lateral", "Vehicle"),
                         (Change("OBD$Speed", "Vehicle")));
     }
+    void OnEvent(const Event& event, event_ctx_ptr context) override {
+        GetLogger().Info() << "Event GetType: " << event.GetType();
+        GetLogger().Info() << "Event GetFeature: " << event.GetFeature();
+        GetLogger().Info() << "Event GetValue: " << event.GetValue()["value"].get<int>();
+        if (event.GetFeature() == "Speed") {
+            auto args =
+                json{event.GetValue()["value"].get<int>(), json{{"factor", event.GetValue()["value"].get<int>()}, {"unit", "kmh"}}};
+
+            //auto t = context->Call(provider_talent.Multiply, args);
+
+            //context->Gather([](std::vector<json> replies) {
+            //    GetLogger().Info() << "Multiply result: " << replies[0].dump(4);
+            //}, nullptr, t);
+
+            //auto s = context->Call(provider_talent.Fib, args, 100);
+
+            //auto handle_result = [](std::vector<json> replies) {
+            //    GetLogger().Info() << "Fibonacci result: " << replies[0].dump(4);
+            //};
+            //auto handle_timeout = [](){
+            //    GetLogger().Info() << "******* Timed out waiting for result";
+            //};
+
+            //context->Gather(handle_result, handle_timeout, s);
+        }
+    }
+
 };
 
 static Client client = Client{SERVER_ADDRESS};
