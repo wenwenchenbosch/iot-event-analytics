@@ -27,16 +27,25 @@ from iotea.core.rules import OrRules, AndRules, Rule, ChangeConstraint, Constrai
 class MyTalent(Talent):
     def __init__(self, connection_string):
         super(MyTalent, self).__init__('python-basic-talent', connection_string)
+        self.prev = None
+        self.prevVal = None
 
     def get_rules(self):
         return OrRules([
             Rule(ChangeConstraint('Speed', 'Vehicle', Constraint.VALUE_TYPE['RAW'])),
-            Rule(ChangeConstraint('Acceleration$Longitudinal', 'Vehicle', Constraint.VALUE_TYPE['RAW']))
+            Rule(ChangeConstraint('Acceleration$Lateral', 'Vehicle', Constraint.VALUE_TYPE['RAW']))
         ])
 
     async def on_event(self, ev, evtctx):
-        print(f'Raw value {TalentInput.get_raw_value(ev)}')
-
+        #print(ev)
+        #print(f'Raw value {TalentInput.get_raw_value(ev)}')
+        if self.prev != None:
+            deltaVal = self.prevVal - TalentInput.get_raw_value(ev)
+            deltaT = self.prev - ev["whenMs"]
+            delta = deltaVal/deltaT
+            print(delta*1000, TalentInput.get_raw_value(ev), deltaT/-1000)
+        self.prev = ev["whenMs"]
+        self.prevVal = TalentInput.get_raw_value(ev)
 
 async def main():
     my_talent = MyTalent('mqtt://localhost:1883')
