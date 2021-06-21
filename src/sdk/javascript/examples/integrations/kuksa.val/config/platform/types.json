@@ -8,7 +8,7 @@
                         "idx": 0,
                         "description": "Vehicle acceleration in X (longitudinal acceleration).",
                         "encoding": {
-                            "type": "number",
+                            "type": "string",
                             "encoder": null
                         }
                     },
@@ -16,7 +16,7 @@
                         "idx": 1,
                         "description": "Vehicle acceleration in Y (lateral acceleration).",
                         "encoding": {
-                            "type": "number",
+                            "type": "string",
                             "encoder": null
                         }
                     },
@@ -40,7 +40,7 @@
                         "idx": 4,
                         "description": "Vehicle speed.",
                         "encoding": {
-                            "type": "number",
+                            "type": "string",
                             "encoder": null
                         }
                     }
