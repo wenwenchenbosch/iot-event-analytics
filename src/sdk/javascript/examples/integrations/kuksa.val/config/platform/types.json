@@ -16,7 +16,7 @@
                         "idx": 1,
                         "description": "Vehicle acceleration in Y (lateral acceleration).",
                         "encoding": {
-                            "type": "string",
+                            "type": "number",
                             "encoder": null
                         }
                     },

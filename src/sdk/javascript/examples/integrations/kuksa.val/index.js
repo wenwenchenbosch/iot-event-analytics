@@ -83,7 +83,7 @@ async function publishAccLonToVssIndefinitly() {
     demoLogger.info(`Publishing ${accLon} to Vehicle.Acceleration.Vertical...`);
 
     await vssws.publish('Vehicle.Acceleration.Vertical', accLon++);
-    await vssws.publish('Vehicle.Acceleration.Longitudinal', accLon++);
+    await vssws.publish('Vehicle.Acceleration.Lateral', accLon++);
 
     setTimeout(() => {
         publishAccLonToVssIndefinitly();
@@ -93,10 +93,10 @@ async function publishAccLonToVssIndefinitly() {
 const mqttAdapterConfig = MqttProtocolAdapter.createDefaultConfiguration();
 const talentGatewayConfig = ProtocolGateway.createDefaultConfiguration([ mqttAdapterConfig ]);
 
-new VssWorker(talentGatewayConfig).start();
+new VssWorker(talentGatewayConfig).start()
     //.then(() => vssws.subscribe('Vehicle.Acceleration.Lateral', msg => {
     //    demoLogger.info(`Received ${msg.value} from ${msg.path}`);
     //}))
-    //.then(() => {
-    //    publishAccLonToVssIndefinitly();
-    //});
+    .then(() => {
+        publishAccLonToVssIndefinitly();
+    });
