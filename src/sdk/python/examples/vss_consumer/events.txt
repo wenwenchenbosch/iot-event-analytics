@@ -1,0 +1,2 @@
+{ "subject": "someuserid", "type": "Vehicle", "instance": "4711", "feature": "Acceleration$Longitudinal", "value": 8 }
+{ "subject": "someuserid", "type": "Vehicle", "instance": "4711", "feature": "Acceleration$Lateral", "value": 9 }

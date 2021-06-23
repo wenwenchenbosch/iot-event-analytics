@@ -13,7 +13,7 @@
 #include "gtest/gtest.h"
 
 #include "nlohmann/json.hpp"
-#include "iotea.hpp"
+#include "schema.hpp"
 
 using json = nlohmann::json;
 
@@ -28,6 +28,9 @@ TEST(Schema, ScalarValueTypes) {
 
     auto number = schema::NumberType{};
     ASSERT_EQ(number.Json(), json::parse(R"({"type": "number"})"));
+
+    auto integer = schema::IntegerType{};
+    ASSERT_EQ(integer.Json(), json::parse(R"({"type": "integer"})"));
 }
 
 TEST(Schema, StringType) {
